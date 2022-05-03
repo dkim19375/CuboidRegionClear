@@ -1,0 +1,15 @@
+name: CuboidRegionClear
+version: ${pluginVersion}
+main: me.dkim19375.cuboidregionclear.CuboidRegionClear
+api-version: 1.16
+author: dkim19375
+description: Clears cuboid regions
+depend:
+  - PlaceholderAPI
+
+commands:
+  cuboidregionclear:
+    description: Main command
+    aliases:
+      - crc
+      - regionclear
