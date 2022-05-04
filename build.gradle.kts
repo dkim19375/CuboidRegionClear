@@ -11,7 +11,7 @@ plugins {
 val KT_VER = "1.6.21"
 
 group = "me.dkim19375"
-version = "1.1.0"
+version = "1.1.1"
 
 val basePackage = "me.dkim19375.${project.name.toLowerCase()}.libs"
 val fileName = tasks.shadowJar.get().archiveFileName.get()
@@ -53,23 +53,19 @@ repositories {
 dependencies {
     compileOnly(fileTree("libs"))
 
-    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.1")
     compileOnly("org.jetbrains:annotations:23.0.0")
-    // compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    // compileOnly("org.spigotmc:spigot:1.17.1-R0.1-SNAPSHOT")
 
+    implementation("net.kyori:adventure-api:4.10.1")
+    implementation("net.kyori:adventure-extra-kotlin:4.10.1")
+    implementation("net.kyori:adventure-platform-bukkit:4.1.0")
+    implementation("net.kyori:adventure-text-minimessage:4.10.1")
     implementation("me.mattstudios:triumph-config:1.0.5-SNAPSHOT")
-
-    implementation("net.kyori:adventure-text-minimessage:4.10.1") {
-        excludeAdventure()
-    }
-    implementation("net.kyori:adventure-extra-kotlin:4.10.1") {
-        excludeAdventure()
-    }
+    implementation("net.kyori:adventure-text-serializer-plain:4.10.1")
+    implementation("net.kyori:adventure-text-serializer-legacy:4.10.1")
     implementation("io.github.dkim19375:dkim-bukkit-core:3.3.36") {
-        excludeAdventure()
         exclude(group = "org.jetbrains.kotlin")
     }
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KT_VER") {
@@ -123,6 +119,7 @@ tasks {
         "kotlin",
         "kotlinx",
         "reactor",
+        "net.kyori",
         "org.yaml.snakeyaml",
         "org.reactivestreams",
         "me.mattstudios.config",
@@ -130,8 +127,6 @@ tasks {
         "org.jetbrains.annotations",
         "me.dkim19375.dkimbukkitcore",
         "org.intellij.lang.annotations",
-        "net.kyori.adventure.text.minimessage",
-        "net.kyori.adventure.extra.kotlin",
     )
 
     shadowJar {
@@ -142,13 +137,4 @@ tasks {
         mergeServiceFiles()
         finalizedBy(copyFile)
     }
-}
-
-fun ExternalModuleDependency.excludeAdventure() {
-    exclude(module = "adventure-api")
-    exclude(module = "adventure-nbt")
-    exclude(module = "adventure-bom")
-    exclude(module = "adventure-examination-api")
-    exclude(module = "adventure-text-serializer-gson")
-    exclude(module = "adventure-text-serializer-legacy")
 }

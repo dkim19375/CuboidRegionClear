@@ -23,6 +23,4 @@ private const val BASE = "cuboidregionclear"
 enum class Permissions(val perm: String) {
     COMMAND("$BASE.command"),
     RELOAD("$BASE.reload"),
-    RESET("$BASE.reset"),
-    STATUS("$BASE.status")
 }

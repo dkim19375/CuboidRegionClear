@@ -43,17 +43,15 @@ class CuboidRegionCmd(private val plugin: CuboidRegionClear) : CommandExecutor {
         when (args[0]) {
             "help" -> {
                 sender.sendHelpMessage(label, args.getOrNull(1)?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
-                return true
             }
             "reload" -> {
                 plugin.reloadConfig()
                 sender.sendMessage(Component.text("Reloaded the config file!").color(NamedTextColor.GREEN))
-                return true
             }
             else -> {
                 sender.sendMessage(ErrorMessages.INVALID_ARG)
-                return true
             }
         }
+        return true
     }
 }

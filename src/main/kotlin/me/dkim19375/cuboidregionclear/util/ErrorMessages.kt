@@ -24,9 +24,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 enum class ErrorMessages(error: String) {
     NO_PERMISSION("You do not have permission!"),
-    NOT_ENOUGH_ARGS("Not enough arguments!"),
     INVALID_ARG("Invalid argument!"),
-    MUST_BE_PLAYER("You must be a player!"),
     ;
     val component: TextComponent = LegacyComponentSerializer.legacySection()
         .deserialize(error)

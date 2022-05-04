@@ -25,10 +25,11 @@ import me.dkim19375.dkimbukkitcore.function.formatAll
 import me.dkim19375.dkimbukkitcore.function.getMaxHelpPages
 import me.dkim19375.dkimbukkitcore.function.showHelpMessage
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
@@ -73,13 +74,19 @@ fun broadcastFormatted(str: String) {
             LegacyComponentSerializer.legacySection().deserialize(formatted)
         )
     )
-    if (PlainComponentSerializer.plain().serialize(miniMessage).trim().isBlank()) {
+    if (PlainTextComponentSerializer.plainText().serialize(miniMessage).trim().isBlank()) {
         return
     }
     broadcast(miniMessage)
 }
 
 fun broadcast(component: Component) {
-    val receivers: List<Audience> = Bukkit.getOnlinePlayers() + Bukkit.getConsoleSender()
+    val receivers: List<CommandSender> = Bukkit.getOnlinePlayers() + Bukkit.getConsoleSender()
     receivers.forEach { it.sendMessage(component) }
 }
+
+private val audience by lazy { BukkitAudiences.create(plugin) }
+
+fun CommandSender.getAudience(): Audience = audience.sender(this)
+
+fun CommandSender.sendMessage(message: Component) = getAudience().sendMessage(message)
