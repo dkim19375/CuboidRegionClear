@@ -53,14 +53,21 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                     continue
                 }
                 messages ?: continue
-                val times = region.timeOfDays.map {
+                val times = mutableListOf<Pair<DateData, Calendar>>()
+                for (timeOfDays in region.timeOfDays) {
+                    val dateData = DateData.fromString(timeOfDays)
                     val calendar = Calendar.getInstance()
-                    calendar.timeInMillis = DateData.fromString(it).toEpochMillis()
-                    val dayOfWeek = region.getDayOfWeek()
-                    if (dayOfWeek != null) {
-                        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek.getCalendarValue())
+                    calendar.timeInMillis = dateData.toEpochMillis()
+                    val dayOfWeeks = region.getDayOfWeeks()
+                    if (dayOfWeeks.isEmpty()) {
+                        times.add(dateData to calendar.clone() as Calendar)
+                        continue
                     }
-                    DateData.fromString(it) to calendar
+                    for (dayOfWeek in dayOfWeeks) {
+                        val clonedCalendar = calendar.clone() as Calendar
+                        clonedCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeek.getCalendarValue())
+                        times.add(dateData to clonedCalendar)
+                    }
                 }
                 val dayOfWeek = LocalDateTime.now().dayOfWeek
                 for ((warningTime, warning) in messages.warnings) {

@@ -11,7 +11,7 @@ plugins {
 val KT_VER = "1.6.21"
 
 group = "me.dkim19375"
-version = "1.0.0"
+version = "1.1.0"
 
 val basePackage = "me.dkim19375.${project.name.toLowerCase()}.libs"
 val fileName = tasks.shadowJar.get().archiveFileName.get()
@@ -130,6 +130,8 @@ tasks {
         "org.jetbrains.annotations",
         "me.dkim19375.dkimbukkitcore",
         "org.intellij.lang.annotations",
+        "net.kyori.adventure.text.minimessage",
+        "net.kyori.adventure.extra.kotlin",
     )
 
     shadowJar {

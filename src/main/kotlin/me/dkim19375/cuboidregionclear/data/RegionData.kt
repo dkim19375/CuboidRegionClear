@@ -34,7 +34,10 @@ data class RegionData(
         "18:00"
     ),
 ) {
-    fun getDayOfWeek(): DayOfWeek? = dayOfWeek.toDayOfWeek()
+    fun getDayOfWeeks(): Set<DayOfWeek> = dayOfWeek.split(',')
+        .map(String::trim)
+        .mapNotNull(String::toDayOfWeek)
+        .toSet()
 
     fun getMessageData(name: String, config: YamlFile): MessageConfigData? = config.get(MainConfigData.MESSAGES)
         .values
@@ -43,11 +46,9 @@ data class RegionData(
         }
 
     fun isCurrent(): Boolean {
-        val dayOfWeek = getDayOfWeek()
-        if (dayOfWeek != null) {
-            if (LocalDate.now().dayOfWeek != dayOfWeek) {
-                return false
-            }
+        val dayOfWeeks = getDayOfWeeks()
+        if (LocalDate.now().dayOfWeek !in dayOfWeeks) {
+            return false
         }
         val now = DateData.getCurrentTime()
         val dates = timeOfDays.map { DateData.fromString(it) }
