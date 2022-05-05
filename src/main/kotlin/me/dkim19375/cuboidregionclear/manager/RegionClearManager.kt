@@ -111,7 +111,9 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
             if (block.type.isAir) {
                 continue
             }
-            block.type = Material.AIR
+            val state = block.state
+            state.type = Material.AIR
+            state.update(true)
         }
     }
 }
