@@ -46,13 +46,15 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                 return@Runnable
             }
             lastTime = time
+            val sentMessages = mutableMapOf<String, Set<Int>>()
             for ((name, region) in regions) {
                 val messages = region.getMessageData(name, config)
                 if (region.isCurrent()) {
-                    clear(region, messages)
+                    clear(region, messages, sentMessages)
                     continue
                 }
                 messages ?: continue
+                fun getTimeSet(): Set<Int> = sentMessages[messages.first] ?: emptySet()
                 val times = mutableListOf<Pair<DateData, Calendar>>()
                 for (timeOfDays in region.timeOfDays) {
                     val dateData = DateData.fromString(timeOfDays)
@@ -70,7 +72,7 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                     }
                 }
                 val dayOfWeek = LocalDateTime.now().dayOfWeek
-                for ((warningTime, warning) in messages.warnings) {
+                for ((warningTime, warning) in messages.second.warnings) {
                     val warningMins = warningTime.toInt()
                     val currentTimeMins = time.toEpochMinutes()
                     val newTime = DateData.fromEpochMinutes(currentTimeMins + warningMins.toLong())
@@ -80,16 +82,29 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                         ), ZoneId.systemDefault()).dayOfWeek == dayOfWeek
                     }
                     if (match != null) {
-                        broadcastFormatted(warning)
+                        if (warningMins !in getTimeSet()) {
+                            broadcastFormatted(warning)
+                            sentMessages[messages.first] = getTimeSet() + warningMins
+                        }
                     }
                 }
             }
         }, 10L, 10L)
     }
 
-    private fun clear(region: RegionData, messages: MessageConfigData?) {
-        messages?.message?.let { message ->
-            broadcastFormatted(message)
+    private fun clear(
+        region: RegionData,
+        messages: Pair<String, MessageConfigData>?,
+        sentMessages: MutableMap<String, Set<Int>>,
+    ) {
+        if (messages != null) {
+            val set = sentMessages[messages.first] ?: emptySet()
+            if (-1 !in set) {
+                messages.second.message.let { message ->
+                    broadcastFormatted(message)
+                    sentMessages[messages.first] = set + -1
+                }
+            }
         }
         for (location in region.cuboid.iterator()) {
             val block = location.block

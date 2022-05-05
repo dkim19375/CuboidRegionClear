@@ -39,11 +39,11 @@ data class RegionData(
         .mapNotNull(String::toDayOfWeek)
         .toSet()
 
-    fun getMessageData(name: String, config: YamlFile): MessageConfigData? = config.get(MainConfigData.MESSAGES)
-        .values
-        .firstOrNull { configData ->
+    fun getMessageData(name: String, config: YamlFile): Pair<String, MessageConfigData>? = config.get(MainConfigData.MESSAGES)
+        .entries
+        .firstOrNull { (_, configData) ->
             configData.regions.containsIgnoreCase(name)
-        }
+        }?.toPair()
 
     fun isCurrent(): Boolean {
         val dayOfWeeks = getDayOfWeeks()
