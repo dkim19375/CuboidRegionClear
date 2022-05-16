@@ -35,6 +35,7 @@ class CuboidRegionTab : TabCompleter {
         val commands = mapOf(
             "help" to Permissions.COMMAND,
             "reload" to Permissions.RELOAD,
+            "check" to Permissions.CHECK,
         )
         return commands.filterValues(sender::hasPermission).keys.toList()
     }

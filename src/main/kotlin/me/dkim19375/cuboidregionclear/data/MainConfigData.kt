@@ -19,6 +19,7 @@
 package me.dkim19375.cuboidregionclear.data
 
 import me.mattstudios.config.SettingsHolder
+import me.mattstudios.config.annotations.Comment
 import me.mattstudios.config.annotations.Path
 import me.mattstudios.config.properties.Property
 
@@ -32,4 +33,8 @@ object MainConfigData : SettingsHolder {
     val MESSAGES = Property.create(MessageConfigData::class.java, mapOf(
         "all" to MessageConfigData()
     ))
+
+    @Path("blocks-per-tick")
+    @Comment("The amount of blocks to clear per tick (20 ticks = 1 second)")
+    val BLOCKS_PER_TICK = Property.create(100000)
 }

@@ -19,12 +19,18 @@
 package me.dkim19375.cuboidregionclear.manager
 
 import me.dkim19375.cuboidregionclear.CuboidRegionClear
+import me.dkim19375.cuboidregionclear.DEBUG
 import me.dkim19375.cuboidregionclear.data.DateData
 import me.dkim19375.cuboidregionclear.data.MainConfigData
 import me.dkim19375.cuboidregionclear.data.MessageConfigData
 import me.dkim19375.cuboidregionclear.data.RegionData
 import me.dkim19375.cuboidregionclear.util.broadcastFormatted
 import me.dkim19375.cuboidregionclear.util.getCalendarValue
+import me.dkim19375.dkimbukkitcore.data.LocationWrapper
+import me.dkim19375.dkimbukkitcore.data.toWrapper
+import me.dkim19375.dkimbukkitcore.function.logInfo
+import me.dkim19375.dkimcore.extension.concurrentMapOf
+import me.dkim19375.dkimcore.extension.setDecimalPlaces
 import me.dkim19375.dkimcore.file.YamlFile
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -36,7 +42,8 @@ import java.util.Calendar
 class RegionClearManager(private val plugin: CuboidRegionClear) {
     private val config: YamlFile
         get() = plugin.mainConfig
-    private var lastTime: DateData? = null
+    var lastTime: DateData? = null
+    private val blocksToClear = concurrentMapOf<LocationWrapper, Boolean>()
 
     init {
         Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
@@ -77,9 +84,11 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                     val currentTimeMins = time.toEpochMinutes()
                     val newTime = DateData.fromEpochMinutes(currentTimeMins + warningMins.toLong())
                     val match = times.firstOrNull { (dateData, calendar) ->
-                        dateData == newTime && LocalDateTime.ofInstant(Instant.ofEpochMilli(
-                            calendar.also { it.add(Calendar.MINUTE, -warningMins) }.timeInMillis
-                        ), ZoneId.systemDefault()).dayOfWeek == dayOfWeek
+                        dateData == newTime && LocalDateTime.ofInstant(
+                            Instant.ofEpochMilli(
+                                calendar.also { it.add(Calendar.MINUTE, -warningMins) }.timeInMillis
+                            ), ZoneId.systemDefault()
+                        ).dayOfWeek == dayOfWeek
                     }
                     if (match != null) {
                         if (warningMins !in getTimeSet()) {
@@ -90,6 +99,33 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                 }
             }
         }, 10L, 10L)
+        Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+            val start = System.nanoTime()
+            val amountToClear = plugin.mainConfig.get(MainConfigData.BLOCKS_PER_TICK)
+            val blocks = blocksToClear.take(amountToClear).ifEmpty { return@Runnable }
+            for ((location, updatePhysics) in blocks) {
+                val state = location.getLocation().block.state
+                state.type = Material.AIR
+                state.update(true, updatePhysics)
+            }
+            val end = System.nanoTime()
+            val time = ((end.toDouble() - start) / 1000000).setDecimalPlaces(3)
+            if (DEBUG) {
+                logInfo("Cleared ${blocks.size} blocks in $time ms")
+            }
+        }, 1L, 1L)
+    }
+
+    private fun <K, V> MutableMap<K, V>.take(amount: Int): Map<K, V> {
+        val map = mutableMapOf<K, V>()
+        for ((key, value) in this) {
+            if (map.size >= amount) {
+                break
+            }
+            map[key] = value
+            remove(key)
+        }
+        return map
     }
 
     private fun clear(
@@ -106,14 +142,25 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
                 }
             }
         }
+        val start = System.nanoTime()
+        var amount = 0
+        val edgeX = setOf(region.cuboid.minX, region.cuboid.maxX)
+        val edgeY = setOf(region.cuboid.minY, region.cuboid.maxY)
+        val edgeZ = setOf(region.cuboid.minZ, region.cuboid.maxZ)
         for (location in region.cuboid.iterator()) {
             val block = location.block
             if (block.type.isAir) {
                 continue
             }
-            val state = block.state
-            state.type = Material.AIR
-            state.update(true)
+            amount++
+            val update = location.blockX in edgeX || location.blockY in edgeY || location.blockZ in edgeZ
+            blocksToClear[location.toWrapper()] = update
+        }
+        val end = System.nanoTime()
+        val time = ((end.toDouble() - start) / 1000000).setDecimalPlaces(3)
+        if (DEBUG) {
+            logInfo("Queued $amount blocks in $time ms")
         }
     }
+
 }

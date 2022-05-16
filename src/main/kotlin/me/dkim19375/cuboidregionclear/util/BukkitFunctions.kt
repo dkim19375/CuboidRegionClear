@@ -41,6 +41,7 @@ private val plugin by lazy { JavaPlugin.getPlugin(CuboidRegionClear::class.java)
 private val commands = listOf(
     HelpMessage("help [page]", "Shows the help menu", Permissions.COMMAND.perm),
     HelpMessage("reload", "Reload the config files", Permissions.RELOAD.perm),
+    HelpMessage("check", "Recheck regions for the current time", Permissions.CHECK.perm),
 )
 
 private val format = HelpMessageFormat(

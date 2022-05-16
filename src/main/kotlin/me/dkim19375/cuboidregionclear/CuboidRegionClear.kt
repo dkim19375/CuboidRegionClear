@@ -28,6 +28,8 @@ import me.dkim19375.dkimcore.file.YamlFile
 import java.io.File
 import kotlin.system.measureTimeMillis
 
+const val DEBUG = false
+
 class CuboidRegionClear : CoreJavaPlugin() {
     override val defaultConfig = false
     val mainConfig by lazy { YamlFile(MainConfigData, File(dataFolder, "config.yml")) }

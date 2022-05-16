@@ -6,6 +6,7 @@ author: dkim19375
 description: Clears cuboid regions
 depend:
   - PlaceholderAPI
+  - WorldEdit
 
 commands:
   cuboidregionclear:

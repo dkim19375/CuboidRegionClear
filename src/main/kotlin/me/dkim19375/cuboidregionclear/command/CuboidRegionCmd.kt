@@ -45,12 +45,22 @@ class CuboidRegionCmd(private val plugin: CuboidRegionClear) : CommandExecutor {
                 sender.sendHelpMessage(label, args.getOrNull(1)?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
             }
             "reload" -> {
+                if (!sender.hasPermission(Permissions.RELOAD)) {
+                    sender.sendMessage(ErrorMessages.NO_PERMISSION)
+                    return true
+                }
                 plugin.reloadConfig()
                 sender.sendMessage(Component.text("Reloaded the config file!").color(NamedTextColor.GREEN))
             }
-            else -> {
-                sender.sendMessage(ErrorMessages.INVALID_ARG)
+            "check" -> {
+                if (!sender.hasPermission(Permissions.CHECK)) {
+                    sender.sendMessage(ErrorMessages.NO_PERMISSION)
+                    return true
+                }
+                plugin.manager.lastTime = null
+                sender.sendMessage(Component.text("Successfully checked!").color(NamedTextColor.GREEN))
             }
+            else -> sender.sendMessage(ErrorMessages.INVALID_ARG)
         }
         return true
     }
