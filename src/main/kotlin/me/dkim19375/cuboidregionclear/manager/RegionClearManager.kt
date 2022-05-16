@@ -19,7 +19,6 @@
 package me.dkim19375.cuboidregionclear.manager
 
 import me.dkim19375.cuboidregionclear.CuboidRegionClear
-import me.dkim19375.cuboidregionclear.DEBUG
 import me.dkim19375.cuboidregionclear.data.DateData
 import me.dkim19375.cuboidregionclear.data.MainConfigData
 import me.dkim19375.cuboidregionclear.data.MessageConfigData
@@ -110,9 +109,7 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
             }
             val end = System.nanoTime()
             val time = ((end.toDouble() - start) / 1000000).setDecimalPlaces(3)
-            if (DEBUG) {
-                logInfo("Cleared ${blocks.size} blocks in $time ms")
-            }
+            logInfo("Cleared ${blocks.size} blocks in $time ms")
         }, 1L, 1L)
     }
 
@@ -158,9 +155,7 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
         }
         val end = System.nanoTime()
         val time = ((end.toDouble() - start) / 1000000).setDecimalPlaces(3)
-        if (DEBUG) {
-            logInfo("Queued $amount blocks in $time ms")
-        }
+        logInfo("Queued $amount blocks in $time ms")
     }
 
 }
