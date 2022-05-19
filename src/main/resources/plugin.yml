@@ -13,3 +13,13 @@ commands:
     aliases:
       - crc
       - regionclear
+
+permissions:
+  cuboidregionclear.command:
+    description: Main command
+  cuboidregionclear.reload:
+    description: Reloads the plugin
+  cuboidregionclear.check:
+    description: Checks for regions
+  cuboidregionclear.reset:
+    description: Resets a region

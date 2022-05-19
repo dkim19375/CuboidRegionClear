@@ -33,6 +33,7 @@ data class RegionData(
     var timeOfDays: Set<String> = setOf(
         "18:00"
     ),
+    var enabled: Boolean = true,
 ) {
     fun getDayOfWeeks(): Set<DayOfWeek> = dayOfWeek.split(',')
         .map(String::trim)

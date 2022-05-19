@@ -11,7 +11,7 @@ plugins {
 val KT_VER = "1.6.21"
 
 group = "me.dkim19375"
-version = "1.1.4"
+version = "1.2.0"
 
 val basePackage = "me.dkim19375.${project.name.toLowerCase()}.libs"
 val fileName = tasks.shadowJar.get().archiveFileName.get()
@@ -65,7 +65,7 @@ dependencies {
     implementation("me.mattstudios:triumph-config:1.0.5-SNAPSHOT")
     implementation("net.kyori:adventure-text-serializer-plain:4.10.1")
     implementation("net.kyori:adventure-text-serializer-legacy:4.10.1")
-    implementation("io.github.dkim19375:dkim-bukkit-core:3.3.38") {
+    implementation("io.github.dkim19375:dkim-bukkit-core:3.3.37") {
         exclude(group = "org.jetbrains.kotlin")
     }
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KT_VER") {

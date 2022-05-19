@@ -42,6 +42,7 @@ private val commands = listOf(
     HelpMessage("help [page]", "Shows the help menu", Permissions.COMMAND.perm),
     HelpMessage("reload", "Reload the config files", Permissions.RELOAD.perm),
     HelpMessage("check", "Recheck regions for the current time", Permissions.CHECK.perm),
+    HelpMessage("reset", "Reset a region", Permissions.RESET.perm),
 )
 
 private val format = HelpMessageFormat(

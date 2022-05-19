@@ -19,11 +19,13 @@
 package me.dkim19375.cuboidregionclear.command
 
 import me.dkim19375.cuboidregionclear.CuboidRegionClear
+import me.dkim19375.cuboidregionclear.data.MainConfigData
 import me.dkim19375.cuboidregionclear.util.ErrorMessages
 import me.dkim19375.cuboidregionclear.util.Permissions
 import me.dkim19375.cuboidregionclear.util.hasPermission
 import me.dkim19375.cuboidregionclear.util.sendHelpMessage
 import me.dkim19375.cuboidregionclear.util.sendMessage
+import me.dkim19375.dkimcore.extension.getIgnoreCase
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.Command
@@ -59,6 +61,26 @@ class CuboidRegionCmd(private val plugin: CuboidRegionClear) : CommandExecutor {
                 }
                 plugin.manager.lastTime = null
                 sender.sendMessage(Component.text("Successfully checked!").color(NamedTextColor.GREEN))
+            }
+            "reset" -> {
+                if (!sender.hasPermission(Permissions.RESET)) {
+                    sender.sendMessage(ErrorMessages.NO_PERMISSION)
+                    return true
+                }
+                if (args.size < 2) {
+                    sender.sendMessage(ErrorMessages.NOT_ENOUGH_PARAMS)
+                    return true
+                }
+                val regionName = plugin.mainConfig.get(MainConfigData.REGIONS).keys.getIgnoreCase(args[1])
+                val region = plugin.mainConfig.get(MainConfigData.REGIONS)[regionName]
+                if (region == null || regionName == null) {
+                    sender.sendMessage(ErrorMessages.INVALID_REGION)
+                    return true
+                }
+                plugin.manager.clear(region)
+                sender.sendMessage(
+                    Component.text("Resetting the region $regionName!").color(NamedTextColor.GREEN)
+                )
             }
             else -> sender.sendMessage(ErrorMessages.INVALID_ARG)
         }
