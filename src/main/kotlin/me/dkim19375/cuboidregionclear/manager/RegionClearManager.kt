@@ -33,6 +33,7 @@ import me.dkim19375.dkimcore.extension.setDecimalPlaces
 import me.dkim19375.dkimcore.file.YamlFile
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.block.Container
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -107,6 +108,9 @@ class RegionClearManager(private val plugin: CuboidRegionClear) {
             val blocks = blocksToClear.take(amountToClear).ifEmpty { return@Runnable }
             for ((location, updatePhysics) in blocks) {
                 val state = location.getLocation().block.state
+                if (state is Container) {
+                    state.inventory.clear()
+                }
                 state.type = Material.AIR
                 state.update(true, updatePhysics)
             }
