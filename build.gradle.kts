@@ -58,7 +58,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
     compileOnly("org.jetbrains:annotations:24.0.1")
 
-    implementation("net.kyori:adventure-api:4.12.0")
+    implementation("net.kyori:adventure-api:4.13.0")
     implementation("net.kyori:adventure-extra-kotlin:4.12.0")
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
     implementation("net.kyori:adventure-text-minimessage:4.12.0")
