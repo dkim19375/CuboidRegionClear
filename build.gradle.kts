@@ -8,7 +8,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-val KT_VER = "1.9.24"
+val KT_VER = "1.9.25"
 
 group = "me.dkim19375"
 version = "1.2.1"
