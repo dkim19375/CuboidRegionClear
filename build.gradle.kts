@@ -56,7 +56,7 @@ dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    compileOnly("org.jetbrains:annotations:25.0.0")
 
     implementation("net.kyori:adventure-api:4.17.0")
     implementation("net.kyori:adventure-extra-kotlin:4.17.0")
