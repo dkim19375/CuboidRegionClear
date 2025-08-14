@@ -3,12 +3,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.2.0"
+    kotlin("jvm") version "2.2.10"
     id("org.cadixdev.licenser") version "0.6.1"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-val KT_VER = "2.2.0"
+val KT_VER = "2.2.10"
 
 group = "me.dkim19375"
 version = "1.2.1"
