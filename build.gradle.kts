@@ -59,7 +59,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:26.0.2")
 
     implementation("net.kyori:adventure-api:4.23.0")
-    implementation("net.kyori:adventure-extra-kotlin:4.23.0")
+    implementation("net.kyori:adventure-extra-kotlin:4.24.0")
     implementation("net.kyori:adventure-platform-bukkit:4.4.0")
     implementation("net.kyori:adventure-text-minimessage:4.23.0")
     implementation("me.mattstudios:triumph-config:1.0.5-SNAPSHOT")
