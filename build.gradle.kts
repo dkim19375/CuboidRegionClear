@@ -63,7 +63,7 @@ dependencies {
     implementation("net.kyori:adventure-platform-bukkit:4.4.0")
     implementation("net.kyori:adventure-text-minimessage:4.23.0")
     implementation("me.mattstudios:triumph-config:1.0.5-SNAPSHOT")
-    implementation("net.kyori:adventure-text-serializer-plain:4.23.0")
+    implementation("net.kyori:adventure-text-serializer-plain:4.24.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.23.0")
     implementation("io.github.dkim19375:dkim-bukkit-core:3.5.1") {
         exclude(group = "org.jetbrains.kotlin")
